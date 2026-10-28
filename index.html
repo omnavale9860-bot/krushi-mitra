@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Krushi Mitra – AI-Based Smart Farming Assistant</title>
+<meta name="description" content="Krushi Mitra is a prototype farming assistant that suggests suitable crops, flags visible crop-growth concerns and estimates an advisory harvesting window.">
+<meta name="theme-color" content="#1f5a36">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Krushi Mitra – AI-Based Smart Farming Assistant">
+<meta property="og:description" content="Crop selection, crop growth check and harvest window estimate. Advisory prototype.">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#fff;--surf:#f3f7ef;--ink:#1d2b1f;--mut:#5c6b5e;--g1:#1f5a36;--g2:#8cc084;--earth:#8a6a3d;--line:#d9e3d3;--warn:#fff4dc;--warnb:#d9a441;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121a14;--surf:#1a251c;--ink:#e8efe6;--mut:#a3b3a5;--g1:#7fcf95;--g2:#2f6b41;--earth:#c9a56b;--line:#2b3a2d;--warn:#2d2616;--warnb:#a77d2a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121a14;--surf:#1a251c;--ink:#e8efe6;--mut:#a3b3a5;--g1:#7fcf95;--g2:#2f6b41;--earth:#c9a56b;--line:#2b3a2d;--warn:#2d2616;--warnb:#a77d2a;color-scheme:dark}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.2;margin:0 0 .5rem}
+header{border-bottom:1px solid var(--line);padding:14px 20px}
+.brand{font:700 1.4rem Georgia,serif;color:var(--g1)}.brand small{display:block;font:400 .85rem system-ui;color:var(--mut)}
+nav{display:flex;gap:6px;flex-wrap:wrap;padding:10px 20px;border-bottom:1px solid var(--line);background:var(--surf)}
+nav button{border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:12px 16px;min-height:44px;border-radius:8px;font:inherit;cursor:pointer}
+nav button[aria-selected=true]{background:var(--g1);color:var(--bg);border-color:var(--g1)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--earth);outline-offset:2px}
+main{max-width:920px;margin:0 auto;padding:22px 20px 60px}
+section{display:none}section.on{display:block}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{border:1px solid var(--line);border-radius:8px;padding:16px;background:var(--bg)}
+.card.m{cursor:pointer;border-left:6px solid var(--g1)}.card.m:hover{background:var(--surf)}
+label{display:block;font-weight:600;margin:12px 0 4px}
+input,select{width:100%;padding:12px;min-height:48px;border:1px solid var(--line);border-radius:6px;font:inherit;background:var(--bg);color:var(--ink)}
+.row{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.go{margin-top:18px;background:var(--g1);color:var(--bg);border:0;padding:15px 24px;width:100%;min-height:52px;border-radius:8px;font:600 1.1rem system-ui;cursor:pointer}
+.badge{display:inline-block;margin-top:4px;padding:2px 10px;border-radius:12px;font-size:.8rem;font-weight:600;color:#1d2b1f}
+.b1{background:#a9dba0}.b2{background:#f2dc8c}.b3{background:#e8b4a6}
+.big{font-size:1.15rem;background:var(--surf);border-radius:8px;padding:12px 14px;margin:12px 0 0}
+.emo{font-size:2.2rem;line-height:1}.mr{display:block;color:var(--mut);font-size:.95rem;font-weight:400}
+.hint{font-size:.88rem;color:var(--mut);margin:4px 0 0}
+.note{background:var(--warn);border-left:5px solid var(--warnb);padding:10px 14px;border-radius:4px;margin:14px 0;font-size:.92rem}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:.93rem}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--mut);font-weight:600}
+.tw{overflow-x:auto}
+.bar{height:8px;background:var(--line);border-radius:4px;min-width:70px}.bar i{display:block;height:100%;background:var(--g1);border-radius:4px}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.8rem;background:var(--surf);border:1px solid var(--line)}
+.ok{color:var(--g1)}.pl{color:var(--earth)}
+#prev,#prev2{max-width:100%;max-height:220px;border-radius:6px;margin-top:10px;display:none}
+.res{margin-top:16px}
+ul{padding-left:20px}
+.skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:var(--g1);color:var(--bg);padding:8px 12px;border-radius:6px;z-index:9}
+.go:disabled{opacity:.6;cursor:wait}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style><link rel="canonical" href="https://omnavale9860-bot.github.io/krushi-mitra/">
+<meta property="og:url" content="https://omnavale9860-bot.github.io/krushi-mitra/">
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}
+gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied'});
+function loadGA(){if(window.__ga)return;window.__ga=1;var s=document.createElement('script');s.async=1;s.src='https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX';document.head.appendChild(s);gtag('js',new Date());gtag('config','G-XXXXXXXXXX',{anonymize_ip:true})}
+</script>
+</head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header><div class="brand">KRUSHI MITRA<small>AI-Based Smart Farming Assistant · working prototype</small></div></header>
+<nav role="tablist" id="nav"></nav>
+<main id="main">
+
+<section id="home" class="on">
+<h2>What do you want to check today?<span class="mr">आज काय तपासायचे आहे?</span></h2>
+<p style="color:var(--mut)">Pick a module. Results are advisory and meant to support, not replace, local agricultural guidance.</p>
+<div class="grid">
+<div class="card m" data-go="crop" tabindex="0"><div class="emo">🌱</div><h3>Crop Selection<span class="mr">पीक निवड</span></h3><p>Find crops that suit your soil, water, season and weather.</p></div>
+<div class="card m" data-go="growth" tabindex="0"><div class="emo">🍃</div><h3>Growth of Crop<span class="mr">पिकाची वाढ</span></h3><p>Upload a crop photo to flag visible concerns.</p></div>
+<div class="card m" data-go="harv" tabindex="0"><div class="emo">🌾</div><h3>Harvesting<span class="mr">कापणी</span></h3><p>Estimate an advisory harvesting window.</p></div>
+</div>
+<h3 style="margin-top:28px">Prototype status</h3>
+<div class="tw"><table><tr><th>Feature</th><th>Status</th></tr>
+<tr><td>Rule-based crop recommendation (small built-in crop table)</td><td class="ok">Implemented in this prototype</td></tr>
+<tr><td>Harvest window from sowing date and typical crop duration</td><td class="ok">Implemented in this prototype</td></tr>
+<tr><td>Photo colour check (green / yellow / brown share of leaf pixels)</td><td class="ok">Implemented – simple heuristic, not a trained model</td></tr>
+<tr><td>Trained computer-vision model for disease / deficiency detection</td><td class="pl">Proposed</td></tr>
+<tr><td>Live weather API and forecast retrieval</td><td class="pl">Proposed (weather is typed in manually here)</td></tr>
+<tr><td>Agricultural database, soil-test integration, Marathi / voice support</td><td class="pl">Proposed</td></tr></table></div>
+<div class="note">No accuracy figures or field-test results are claimed. The crop table holds indicative values for demonstration and must be verified against local agricultural recommendations.</div>
+</section>
+
+<section id="crop">
+<h2>Crop Selection</h2>
+<div class="row">
+<div><label for="soil">Soil type</label><select id="soil"><option value="black">Black – sticky when wet, cracks when dry</option><option value="red">Red – reddish, drains quickly</option><option value="alluvial">Alluvial – river-deposited, fertile</option><option value="loamy">Loamy – soft, crumbly, holds moisture</option><option value="sandy">Sandy – light, gritty, dries fast</option><option value="clay">Clayey – heavy, holds water long</option></select></div>
+<div><label for="water">Water availability</label><select id="water"><option value="low">Rain-fed / limited</option><option value="med" selected>Moderate irrigation</option><option value="high">Assured irrigation</option></select></div>
+<div><label for="season">Season</label><select id="season"><option value="kharif">Kharif (Jun–Oct)</option><option value="rabi">Rabi (Nov–Mar)</option><option value="summer">Summer (Mar–Jun)</option></select></div>
+<div><label for="temp">Weather these days</label><select id="temp"><option value="16">Cool (below 20°C)</option><option value="24">Mild (20–27°C)</option><option value="30" selected>Warm (28–33°C)</option><option value="36">Hot (above 33°C)</option></select><p class="hint">Live forecast is a proposed feature.</p></div>
+<div><label for="loc">Location</label><input id="loc" placeholder="e.g. Pune, Maharashtra"></div>
+<div><label for="land">Land size (acres, optional)</label><input id="land" type="number" min="0" step="0.1"></div>
+</div>
+<label for="soilimg">Soil photograph (optional)</label><input id="soilimg" type="file" accept="image/*">
+<img id="prev" alt="Soil preview">
+<div class="note">A soil photograph alone cannot reliably determine pH, nutrients or full soil composition. It is stored only as a reference here and is not used in scoring. Use a laboratory soil test for accurate analysis.</div>
+<button class="go" id="r1">Recommend crops</button>
+<div class="res" id="out1" aria-live="polite"></div>
+</section>
+
+<section id="growth">
+<h2>Growth of Crop</h2>
+<div class="row"><div><label for="gc">Crop</label><select id="gc" class="cs"></select></div>
+<div><label for="gimg">Current crop / leaf photograph</label><p class="hint">Tip: take a close photo of one leaf in daylight.</p><input id="gimg" type="file" accept="image/*"></div></div>
+<img id="prev2" alt="Crop preview">
+<button class="go" id="r2">Analyse photo</button>
+<div class="res" id="out2" aria-live="polite"></div>
+<div class="note">This prototype measures colour only. A photograph alone cannot definitively diagnose every disease or nutrient deficiency. If symptoms are unclear, consult an agricultural expert or your local Krishi office.</div>
+</section>
+
+<section id="harv">
+<h2>Harvesting</h2>
+<div class="row"><div><label for="hc">Crop</label><select id="hc" class="cs"></select></div>
+<div><label for="hd">Sowing / transplanting date</label><input id="hd" type="date"></div>
+<div><label for="hv">Crop variety (optional)</label><input id="hv" placeholder="e.g. local / hybrid name"></div>
+<div><label for="himg">Current photograph (optional)</label><input id="himg" type="file" accept="image/*"></div></div>
+<button class="go" id="r3">Estimate harvesting window</button>
+<div class="res" id="out3" aria-live="polite"></div>
+<div class="note">Advisory estimate. Confirm with crop-specific maturity indicators and local agricultural guidance. Weather can shift the window.</div>
+</section>
+</main>
+
+<script>
+const C={
+ Rice:{soil:["clay","alluvial","black"],w:"high",s:["kharif"],t:[22,35],d:[110,140],why:"Needs standing water",mat:"Grains turn golden, about 80–85% of panicle straw-coloured"},
+ Wheat:{soil:["alluvial","loamy","black"],w:"med",s:["rabi"],t:[10,25],d:[110,130],why:"Cool-season cereal",mat:"Ears and stems turn yellow, grains hard"},
+ Jowar:{soil:["black","red","loamy"],w:"low",s:["kharif","rabi"],t:[20,32],d:[100,120],why:"Tolerates limited water",mat:"Grains hard, leaves and stalk dry"},
+ Bajra:{soil:["sandy","red","loamy"],w:"low",s:["kharif"],t:[25,36],d:[75,90],why:"Suited to dry, light soils",mat:"Ear heads firm, lower leaves dry"},
+ Maize:{soil:["loamy","alluvial","red"],w:"med",s:["kharif","rabi"],t:[21,32],d:[90,110],why:"Needs well-drained soil",mat:"Husks dry, kernels hard"},
+ Soybean:{soil:["black","loamy"],w:"med",s:["kharif"],t:[22,32],d:[90,110],why:"Common on black soil in kharif",mat:"Leaves drop, pods turn brown"},
+ Cotton:{soil:["black","alluvial"],w:"med",s:["kharif"],t:[21,34],d:[150,180],why:"Prefers deep black soil",mat:"Bolls open and fibre is visible"},
+ Groundnut:{soil:["sandy","red","loamy"],w:"med",s:["kharif","summer"],t:[22,32],d:[100,120],why:"Needs loose soil for pods",mat:"Lower leaves yellow, pods hard"},
+ Gram:{soil:["black","loamy","clay"],w:"low",s:["rabi"],t:[15,28],d:[95,110],why:"Low water, cool season pulse",mat:"Leaves and pods turn yellow-brown"},
+ Onion:{soil:["loamy","alluvial","red"],w:"med",s:["rabi","kharif"],t:[13,30],d:[100,150],why:"Needs well-drained soil",mat:"Tops fall over and neck softens"},
+ Tomato:{soil:["loamy","red","alluvial"],w:"med",s:["rabi","summer","kharif"],t:[18,30],d:[90,120],why:"Needs drained soil, regular water",mat:"Fruit shows colour change to red"},
+ Sugarcane:{soil:["black","alluvial","loamy"],w:"high",s:["kharif","summer"],t:[20,35],d:[330,365],why:"Long duration, high water need",mat:"Lower leaves dry, brix to be checked"}
+};
+const $=id=>document.getElementById(id);
+const tabs=[["home","🏠 Home"],["crop","🌱 Crop Selection"],["growth","🍃 Crop Growth"],["harv","🌾 Harvesting"]];
+tabs.forEach(([id,t])=>{const b=document.createElement("button");b.textContent=t;b.setAttribute("role","tab");b.dataset.id=id;b.onclick=()=>show(id);$("nav").append(b)});
+function show(id){document.querySelectorAll("section").forEach(s=>s.classList.toggle("on",s.id===id));
+ document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",b.dataset.id===id));scrollTo(0,0)}
+document.querySelectorAll("[data-go]").forEach(c=>{c.onclick=()=>show(c.dataset.go);c.onkeydown=e=>{if(e.key==="Enter")show(c.dataset.go)}});
+show("home");
+document.querySelectorAll(".cs").forEach(s=>Object.keys(C).forEach(k=>s.add(new Option(k,k))));
+const WL={low:1,med:2,high:3},WN={low:"Low",med:"Medium",high:"High"};
+function prev(inp,img){inp.onchange=()=>{const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{img.src=r.result;img.style.display="block"};r.readAsDataURL(f)}}
+prev($("soilimg"),$("prev"));prev($("gimg"),$("prev2"));
+
+$("r1").onclick=()=>{
+ const soil=$("soil").value,w=$("water").value,s=$("season").value,t=+$("temp").value;
+ const rows=Object.entries(C).map(([n,c])=>{
+  const sp=c.soil[0]===soil?100:c.soil.includes(soil)?70:20;
+  const diff=WL[w]-WL[c.w];const wp=diff===0?100:diff>0?(diff===1?75:50):(diff===-1?40:10);
+  const seas=c.s.includes(s)?100:0;
+  const tp=t>=c.t[0]&&t<=c.t[1]?100:Math.max(0,100-Math.min(Math.abs(t-c.t[0]),Math.abs(t-c.t[1]))*15);
+  const tot=Math.round(sp*.35+wp*.25+seas*.2+tp*.2)*(seas?1:.5);
+  const r=[];r.push(sp>=100?"soil is a preferred match":sp>=70?"soil is acceptable":"soil is a weak match");
+  r.push(diff<0?"needs more water than available":diff>0?"your water exceeds its need":"water matches");
+  r.push(seas?"fits the season":"outside usual season");r.push(tp>=100?"temperature in range":"temperature outside "+c.t.join("–")+"°C");
+  return{n,c,sp,wp,tp,seas,tot:Math.round(tot),r}}).sort((a,b)=>b.tot-a.tot).slice(0,6);
+ $("out1").innerHTML=`<h3>Shortlist${$("loc").value?" for "+$("loc").value.replace(/[<>&]/g,""):""}</h3><p class="big">Best match: <b>${rows[0].n}</b> – ${rows[0].c.why}.</p><div class="tw"><table><tr><th>Crop</th><th>Fit</th><th>Soil</th><th>Water need</th><th>Weather</th><th>Reasons</th></tr>`+
+ rows.map(x=>`<tr><td><b>${x.n}</b><br><span class="badge ${x.tot>=75?'b1':x.tot>=50?'b2':'b3'}">${x.tot>=75?'Good choice':x.tot>=50?'Possible':'Not ideal'}</span></td><td><div class="bar"><i style="width:${x.tot}%"></i></div>${x.tot}/100</td><td>${x.sp>=100?"High":x.sp>=70?"Medium":"Low"}</td><td>${WN[x.c.w]}</td><td>${x.tp>=100?"Suitable":"Check"}</td><td>${x.r.join("; ")}.</td></tr>`).join("")+
+ `</table></div><div class="note">The score is a demonstration of rule-based logic, not a prediction of yield. Confirm against a soil test, local forecast and agriculture-department advice.</div>`};
+
+function analyse(file){return new Promise(res=>{const fr=new FileReader();fr.onerror=()=>res(null);fr.onload=()=>{const im=new Image();im.onerror=()=>res(null);im.onload=()=>{const c=document.createElement("canvas");const k=Math.min(1,200/im.width);c.width=im.width*k;c.height=im.height*k;
+ const x=c.getContext("2d");x.drawImage(im,0,0,c.width,c.height);const d=x.getImageData(0,0,c.width,c.height).data;
+ let g=0,y=0,b=0,n=0;for(let i=0;i<d.length;i+=4){const[r,gg,bl]=[d[i],d[i+1],d[i+2]];const mx=Math.max(r,gg,bl),mn=Math.min(r,gg,bl);if(mx<40||mn>200||mx-mn<25)continue;n++;
+  if(gg>=r&&gg>=bl)g++;else if(r>gg&&gg>bl*1.2&&gg>r*.7)y++;else if(r>gg&&r>bl)b++}
+ res(n<50?null:{g:g/n,y:y/n,b:b/n})};im.src=fr.result};fr.readAsDataURL(file)})}
+
+$("r2").onclick=async()=>{const f=$("gimg").files[0];if(!f){$("out2").innerHTML='<div class="note">Please choose a photograph first.</div>';return}
+ const a=await analyse(f);if(!a){$("out2").innerHTML='<div class="note">Not enough plant colour found in the photo. Retake it close to the leaf in daylight.</div>';return}
+ const p=v=>Math.round(v*100)+"%";const L=[];
+ if(a.y>.2)L.push(["Yellowing visible ("+p(a.y)+" of coloured area)","Possible causes: nutrient shortage (often nitrogen), over- or under-watering, or early disease. Check soil moisture and the pattern (old vs new leaves)."]);
+ if(a.b>.12)L.push(["Brown / dark areas visible ("+p(a.b)+")","Possible causes: leaf spot or blight, water stress, or sun scorch. Look for spreading spots and inspect the underside of leaves."]);
+ if(!L.length)L.push(["No strong colour warning","Leaf colour looks mostly green. This does not rule out disease or pests; keep scouting regularly."]);
+ $("out2").innerHTML=`<h3>${$("gc").value}: observations</h3><p>Colour share – green ${p(a.g)}, yellow ${p(a.y)}, brown ${p(a.b)}</p><ul>`+L.map(l=>`<li><b>${l[0]}.</b> ${l[1]}</li>`).join("")+
+ `</ul><p><b>Suggested next steps:</b> take photos of several plants, note when symptoms began, and avoid spraying until the cause is confirmed. ${(a.y>.2||a.b>.12)?"Show the photos to a local agricultural expert.":""}</p>`};
+
+$("r3").onclick=async()=>{const d=$("hd").value;if(!d){$("out3").innerHTML='<div class="note">Enter the sowing or transplanting date.</div>';return}
+ const c=C[$("hc").value],s=new Date(d),f=new Date(s),l=new Date(s);f.setDate(f.getDate()+c.d[0]);l.setDate(l.getDate()+c.d[1]);
+ const fm=x=>x.toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+ const age=Math.floor((Date.now()-s)/864e5);let st=age<0?"Sowing date is in the future.":age<c.d[0]?`About ${c.d[0]-age} days to the earliest expected date.`:age<=c.d[1]?"Inside the expected harvesting window; check maturity signs now.":"Past the usual window; inspect the crop soon.";
+ let ph="";const f3=$("himg").files[0];if(f3){const a=await analyse(f3);if(a)ph=`<p>Photo colour: green ${Math.round(a.g*100)}%, yellow ${Math.round(a.y*100)}%, brown ${Math.round(a.b*100)}%. ${a.g>.7?"Mostly green, so the crop may still be maturing.":"Less green colour can indicate approaching maturity, but confirm with the signs below."}</p>`}
+ $("out3").innerHTML=`<h3>${$("hc").value}${$("hv").value?" ("+$("hv").value.replace(/[<>&]/g,"")+")":""}</h3><p><b>Estimated window:</b> ${fm(f)} to ${fm(l)} (typical duration ${c.d[0]}–${c.d[1]} days)</p><p>${st}</p>${ph}
+ <p><b>Check before harvesting:</b> ${c.mat}.</p><p><b>Precautions:</b> avoid harvesting just before or during rain, check the local forecast, and arrange drying or storage in advance.</p>`};
+document.querySelectorAll('.res').forEach(el=>new MutationObserver(()=>el.scrollIntoView({block:'start'})).observe(el,{childList:true}));
+</script><div id="cb" role="dialog" aria-label="Analytics consent" style="position:fixed;left:0;right:0;bottom:0;background:var(--surf);border-top:1px solid var(--line);padding:12px 16px;display:none;gap:10px;align-items:center;flex-wrap:wrap;z-index:20"><span style="flex:1;min-width:200px">We use Google Analytics to count visits. No personal details from the forms are sent.</span><button class="go" style="width:auto;margin:0" id="ca">Accept</button><button class="go" style="width:auto;margin:0;background:var(--mut)" id="cd">Decline</button></div>
+<script>
+(function(){var k='km_consent',v=null;try{v=localStorage.getItem(k)}catch(e){}
+function set(a){try{localStorage.setItem(k,a)}catch(e){}document.getElementById('cb').style.display='none';if(a==='yes'){gtag('consent','update',{analytics_storage:'granted'});loadGA()}}
+if(v==='yes'){gtag('consent','update',{analytics_storage:'granted'});loadGA()}else if(v!=='no'){document.getElementById('cb').style.display='flex'}
+document.getElementById('ca').onclick=function(){set('yes')};document.getElementById('cd').onclick=function(){set('no')};
+['r1','r2','r3'].forEach(function(id,i){document.getElementById(id).addEventListener('click',function(){if(window.__ga)gtag('event','module_used',{module:['crop_selection','growth','harvest'][i]})})})})();
+</script>
+</body></html>
